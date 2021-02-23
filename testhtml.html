@@ -24,9 +24,9 @@
   <path d="M 100 100 L 300 100 L 200 300 z"
         fill="orange" stroke="black" stroke-width="3" />
 </svg>
-        <div class="clocks">
+<!--         <div class="clocks">
             <canvas id="canvas" width="500" height="500"></canvas>
-        </div>
+        </div> -->
     </body>
     <script>
     // inner variables
@@ -112,18 +112,18 @@ function drawScene() { // main drawScene function
     ctx.restore();
 }
 
-// initialization
-$(function(){
-    canvas = document.getElementById('canvas');
-    ctx = canvas.getContext('2d');
+// // initialization
+// $(function(){
+//     canvas = document.getElementById('canvas');
+//     ctx = canvas.getContext('2d');
 
-    // var width = canvas.width;
-    // var height = canvas.height;
+//     // var width = canvas.width;
+//     // var height = canvas.height;
 
-clockImage = new Image();
-clockImage.src = 'https://static.runoob.com/images/mix/125855_nnla_89964.png';
+// clockImage = new Image();
+// clockImage.src = 'https://static.runoob.com/images/mix/125855_nnla_89964.png';
 
-    setInterval(drawScene, 1000); // loop drawScene
-});
+//     setInterval(drawScene, 1000); // loop drawScene
+// });
     </script>
 </html>
