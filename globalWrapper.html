@@ -4,11 +4,14 @@
 <head>
    <script>
         let globalVar
+        let location = 'test'
+        let top = 'test'
         function wrapper() {
             let refLoc = location
             let refLoc1 = window.location
             let localVar = globalVar
             let localVar = globalVar1
+
             function test() {
                 return location
             }
