@@ -1,21 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script>
+
+<head>
+    <script>
+        function wrapper() {
             let refLoc = location
             let refLoc1 = window.location
+
             function test() {
                 return location
             }
             refLoc.href = 'xxxx'
             refLoc1.replace('xxxx')
-            if(window === top) {
+            if (window === top) {
                 console.log('not in iframe')
             }
             let refLoc2 = test()
-        </script>
-    </head>
-    <body>
+        }
+    </script>
+</head>
 
-    </body>
+<body>
+
+</body>
+
 </html>
