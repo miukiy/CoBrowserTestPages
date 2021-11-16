@@ -297,8 +297,7 @@
             <option value="google">Google</option>
         </select>
         <br>
-        <textarea id="constraints">{"video":{"width":{"ideal":1280},"height":{"ideal":720},"aspectRatio":{"ideal":1.77778},"frameRate":{"ideal":30}}}
-        </textarea>
+        <textarea id="constraints"></textarea>
         <br>
         <button id="showVideo">Open camera</button>
         <div id="infoMsg"></div>
@@ -311,10 +310,8 @@
         const Google_Constraints = {"video":{"advanced":[{"frameRate":{"min":20}},{"height":{"min":360}},{"width":{"min":640}},{"frameRate":{"max":20}},{"width":{"max":640}},{"height":{"max":360}},{"aspectRatio":{"exact":1.77778}}]}} 
         const videoSelect = document.querySelector('select#videoSource');
         const selectors = [videoSelect];
-
-        function selectChanged() {
-            let select = document.getElementById('constraint-select')
-            switch(select.value) {
+        function setValueOfSelect(option) {
+            switch(option) {
                 case 'mx':{
                     document.querySelector('#constraints').value = JSON.stringify(MX_Constraints)
                     break
@@ -328,6 +325,11 @@
                     break
                 }
             }
+        }
+        setValueOfSelect(document.getElementById('constraint-select').value)
+        function selectChanged() {
+            let select = document.getElementById('constraint-select')
+            setValueOfSelect(select.value)
         }
         function gotDevices(deviceInfos) {
             // Handles being called several times to update labels. Preserve values.
