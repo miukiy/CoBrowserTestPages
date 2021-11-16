@@ -289,6 +289,14 @@
             <label for="videoSource">Video source: </label><select id="videoSource"></select>
         </div>
         <video id="gum-local" autoplay playsinline></video>
+        <br>
+        <label for="pet-select">Choose a constraints:</label>
+        <select name="constraints" id="constraint-select" onchange="selectChanged()">
+            <option value="mx">MX</option>
+            <option value="simple">Simple</option>
+            <option value="google">Google</option>
+        </select>
+        <br>
         <textarea id="constraints">{"video":{"width":{"ideal":1280},"height":{"ideal":720},"aspectRatio":{"ideal":1.77778},"frameRate":{"ideal":30}}}
         </textarea>
         <br>
@@ -298,8 +306,29 @@
 
     <script>
         let videoStream
+        const MX_Constraints = {"video":{"width":{"ideal":1280},"height":{"ideal":720},"aspectRatio":{"ideal":1.77778},"frameRate":{"ideal":30}}} 
+        const Simple_Constraints = {"video":true}
+        const Google_Constraints = {"video":{"advanced":[{"frameRate":{"min":20}},{"height":{"min":360}},{"width":{"min":640}},{"frameRate":{"max":20}},{"width":{"max":640}},{"height":{"max":360}},{"aspectRatio":{"exact":1.77778}}]}} 
         const videoSelect = document.querySelector('select#videoSource');
         const selectors = [videoSelect];
+
+        function selectChanged() {
+            let select = document.getElementById('constraint-select')
+            switch(select.value) {
+                case 'mx':{
+                    document.querySelector('#constraints').value = JSON.stringify(MX_Constraints)
+                    break
+                }
+                case 'simple': {
+                    document.querySelector('#constraints').value = JSON.stringify(Simple_Constraints)
+                    break
+                }
+                case 'google': {
+                    document.querySelector('#constraints').value = JSON.stringify(Google_Constraints)
+                    break
+                }
+            }
+        }
         function gotDevices(deviceInfos) {
             // Handles being called several times to update labels. Preserve values.
             const values = selectors.map(select => select.value);
@@ -318,14 +347,17 @@
                 }
             }
             selectors.forEach((select, selectorIndex) => {
-                if (Array.prototype.slice.call(select.childNodes).some(n => n.value === values[selectorIndex])) {
+                if (Array.prototype.slice.call(select.childNodes).some(n => n.value === values[
+                    selectorIndex])) {
                     select.value = values[selectorIndex];
                 }
             });
         }
-        navigator.mediaDevices.getUserMedia({video:true}).then((stream)=>{
+        navigator.mediaDevices.getUserMedia({
+            video: true
+        }).then((stream) => {
             let tracks = stream.getTracks()
-            tracks.forEach((track)=>{
+            tracks.forEach((track) => {
                 track.stop()
             })
             stream = null
@@ -339,7 +371,7 @@
             const video = document.querySelector('video');
             const videoTracks = stream.getVideoTracks();
             let track = videoTracks[0]
-            infoMsg('Got stream with constraints:'+ JSON.stringify(track.getConstraints()));
+            infoMsg('Got stream with constraints:' + JSON.stringify(track.getConstraints()));
             infoMsg(`Using video device: ${videoTracks[0].label}`);
             infoMsg(`Track capabilities are: ${JSON.stringify(track.getCapabilities())}`)
             infoMsg(`//////////////////////////////////////////////////////////////////`)
@@ -368,19 +400,21 @@
             try {
                 const video = document.querySelector('video');
                 video.srcObject = null
-                if(videoStream) {
+                if (videoStream) {
                     let tracks = videoStream.getTracks()
-                    tracks.forEach((track)=>{
+                    tracks.forEach((track) => {
                         track.stop()
                     })
                     videoStream = null
                 }
                 constraints = JSON.parse(document.querySelector('#constraints').value);
-                if(typeof constraints.video !== 'object') {
+                if (typeof constraints.video !== 'object') {
                     constraints.video = {}
                 }
                 const videoSource = videoSelect.value;
-                constraints.video.deviceId = videoSource ? {exact: videoSource} : undefined
+                constraints.video.deviceId = videoSource ? {
+                    exact: videoSource
+                } : undefined
                 videoStream = await navigator.mediaDevices.getUserMedia(constraints);
                 handleSuccess(videoStream);
             } catch (e) {
